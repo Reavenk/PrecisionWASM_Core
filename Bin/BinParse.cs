@@ -20,6 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+using System.Collections.Generic;
+
 namespace PxPre.WASM
 {
     public static class BinParse
@@ -180,6 +182,82 @@ namespace PxPre.WASM
                 // Sign extend for negative
                 ret |= ~((long)0) << shift;
             }
+            return ret;
+        }
+
+        static public List<byte> EncodeSignedLEB(int v)
+        {
+            List<byte> ret = new List<byte>();
+            while (true)
+            {
+                byte b = (byte)(v & (int)0x7F);
+                v >>= 7;
+
+                if (
+                    (v == 0 && (byte)(b & 0x40) == 0) ||
+                    (v == -1 && (byte)(b & 0x40) != 0))
+                {
+                    ret.Add(b);
+                    return ret;
+                }
+                ret.Add((byte)(b | 0x80));
+            }
+        }
+
+        static public List<byte> EncodeUnsignedLEB(uint v)
+        {
+            List<byte> ret = new List<byte>();
+
+            do
+            {
+                byte b = (byte)(v & ((1 << 7) - 1));
+                v >>= 7;
+
+                if (v != 0)
+                    b |= (byte)(1 << 7);
+
+                ret.Add(b);
+            }
+            while (v != 0);
+
+            return ret;
+        }
+
+        static public List<byte> EncodeSignedLEB(long v)
+        {
+            List<byte> ret = new List<byte>();
+            while (true)
+            {
+                byte b = (byte)(v & (int)0x7F);
+                v >>= 7;
+
+                if (
+                    (v == 0 && (byte)(b & 0x40) == 0) ||
+                    (v == -1 && (byte)(b & 0x40) != 0))
+                {
+                    ret.Add(b);
+                    return ret;
+                }
+                ret.Add((byte)(b | 0x80));
+            }
+        }
+
+        static public List<byte> EncodeUnsignedLEB(ulong v)
+        {
+            List<byte> ret = new List<byte>();
+
+            do
+            {
+                byte b = (byte)(v & ((1 << 7) - 1));
+                v >>= 7;
+
+                if (v != 0)
+                    b |= (byte)(1 << 7);
+
+                ret.Add(b);
+            }
+            while (v != 0);
+
             return ret;
         }
     }
