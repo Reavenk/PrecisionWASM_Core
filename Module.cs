@@ -369,7 +369,10 @@ namespace PxPre.WASM
                 {
                     uint numSegments = BinParse.LoadUnsignedLEB32(pb, ref idx);
 
-                    if(ret.storeDecl.tables.Count < 1)
+                    if(numSegments == 0)
+                        continue;
+
+                    if (ret.storeDecl.tables.Count < 1)
                         throw new System.Exception("Element(s) specified when no tables are defined.");
                     
                     DefTable defTable = ret.storeDecl.tables[0];
@@ -472,7 +475,10 @@ namespace PxPre.WASM
                 {
                     uint numData = BinParse.LoadUnsignedLEB32(pb, ref idx);
 
-                    if(ret.storeDecl.memories.Count < 1)
+                    if(numData == 0)
+                        continue;
+
+                    if (ret.storeDecl.memories.Count < 1)
                         throw new System.Exception("Data(s) specified when no mems are defined.");
 
                     for(uint i = 0; i < numData; ++i)
