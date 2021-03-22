@@ -546,7 +546,11 @@ namespace PxPre.WASM
             if(fnid == -1)
                 return null;
 
-            return this.functions[fnid];
+            IndexEntry ie = this.storeDecl.IndexingFunction[fnid];
+            if(ie.type == IndexEntry.FnIdxType.Import)
+                return null;
+
+            return this.functions[ie.index];
         }
 
         public int GetExportedFunctionID(string fnName, out FunctionType fnty)
