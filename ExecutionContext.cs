@@ -160,11 +160,8 @@ namespace PxPre.WASM
 
         unsafe public void RunFunction(Function fn)
         { 
-
             int ip = 0;
-
             int startStack = this.stackPos;
-
 
             Memory curMemStore = null;
             Table curTableStore = null;
